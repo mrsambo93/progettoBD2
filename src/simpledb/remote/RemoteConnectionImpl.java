@@ -72,13 +72,15 @@ class RemoteConnectionImpl extends UnicastRemoteObject implements RemoteConnecti
 		tx = new Transaction();
 	}
 
-	//TODO
 	private static void printBlockStats(String fileName, BasicFileStats fileStats) {
-
+		System.out.println(fileName + " : read" + fileStats.getBlockRead() + ", write " + fileStats.getBlockWritten());
 	}
 
 	private static void printAllBlockStats() {
-
+		for(String fileName : SimpleDB.fileMgr().getMapStats().keySet()) {
+			BasicFileStats fileStats = SimpleDB.fileMgr().getMapStats().get(fileName);
+			System.out.println(fileName + " : read" + fileStats.getBlockRead() + ", write " + fileStats.getBlockWritten());
+		}
 	}
 }
 

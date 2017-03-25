@@ -63,6 +63,7 @@ public class FileMgr {
 			bb.clear();
 			FileChannel fc = getFile(blk.fileName());
 			fc.read(bb, blk.number() * BLOCK_SIZE);
+			updateReadBlockStats(blk, bb);
 		}
 		catch (IOException e) {
 			throw new RuntimeException("cannot read block " + blk);
@@ -79,6 +80,7 @@ public class FileMgr {
 			bb.rewind();
 			FileChannel fc = getFile(blk.fileName());
 			fc.write(bb, blk.number() * BLOCK_SIZE);
+			updateWriteBlockStats(blk, bb);
 		}
 		catch (IOException e) {
 			throw new RuntimeException("cannot write block" + blk);
@@ -148,18 +150,18 @@ public class FileMgr {
 
 	//TODO
 	private void updateReadBlockStats(Block blk, ByteBuffer bb) {
-
+		this.blockStatsFile.get(blk.fileName()).incrementBlockRead();
 	}
 
 	private void updateWriteBlockStats(Block blk, ByteBuffer bb) {
-
+		this.blockStatsFile.get(blk.fileName()).incrementBlockWritten();
 	}
 	
 	public final Map<String,BasicFileStats> getMapStats() {
-		return null;
+		return this.blockStatsFile;
 	}
 	
 	public final void resetMapStats() {
-		
+		this.blockStatsFile.clear();
 	}
 }

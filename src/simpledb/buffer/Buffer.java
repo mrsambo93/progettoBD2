@@ -16,7 +16,7 @@ import simpledb.file.*;
  * the LSN of the corresponding log record.
  * @author Edward Sciore
  */
-public class Buffer {
+public class Buffer implements Comparable<Buffer>{
 	private Page contents = new Page();
 	private Block blk = null;
 	private int pins = 0;
@@ -108,7 +108,6 @@ public class Buffer {
 		contents.setString(offset, val);
 	}
 
-
 	public long getLastUnpinTimestamp() {
 		return lastUnpinTimestamp;
 	}
@@ -116,7 +115,7 @@ public class Buffer {
 	public void setLastUnpinTimestamp(long lastUnpinTimestamp) {
 		this.lastUnpinTimestamp = lastUnpinTimestamp;
 	}
-
+	
 	/**
 	 * Returns a reference to the disk block
 	 * that the buffer is pinned to.
@@ -202,5 +201,10 @@ public class Buffer {
 		fmtr.format(contents);
 		blk = contents.append(filename);
 		pins = 0;
+	}
+
+	@Override
+	public int compareTo(Buffer o) {
+		return (int) (getLastUnpinTimestamp() - o.getLastUnpinTimestamp());
 	}
 }

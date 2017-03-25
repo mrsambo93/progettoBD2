@@ -1,6 +1,9 @@
 package simpledb.buffer;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import simpledb.file.*;
 
@@ -13,6 +16,7 @@ class BasicBufferMgr {
 	private Buffer[] bufferpool;
 	private int numAvailable;
 	private int lastReplacedPageIndex;
+	private List<Buffer> bufferList;
 
 	/**
 	 * Creates a buffer manager having the specified number 
@@ -33,6 +37,7 @@ class BasicBufferMgr {
 		for (int i=0; i<numbuffs; i++)
 			bufferpool[i] = new Buffer();
 		lastReplacedPageIndex = -1;
+		bufferList = new ArrayList<Buffer>(Arrays.asList(bufferpool));
 	}
 
 	/**
@@ -135,10 +140,22 @@ class BasicBufferMgr {
 	}
 
 	private Buffer chooseUnpinnedBuffer_LRU() {
+		Collections.sort(bufferList);
+		for(Buffer buff : bufferList) {
+			if (!buff.isPinned())
+				return buff;
+		}
 		return null;
 	}
 
 	private Buffer chooseUnpinnedBuffer_FIFO() {
+		for(Buffer buff : bufferList) {
+			if (!buff.isPinned()) {
+				bufferList.remove(buff);
+				bufferList.add(buff);
+				return buff;
+			}
+		}
 		return null;
 	}
 

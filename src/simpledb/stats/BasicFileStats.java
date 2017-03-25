@@ -3,8 +3,8 @@ package simpledb.stats;
 
 public class BasicFileStats {
 
-	private int blockRead;
-	private int blockWritten;
+	private int blockRead = 0;
+	private int blockWritten = 0;
 
 	public BasicFileStats() {}
 
