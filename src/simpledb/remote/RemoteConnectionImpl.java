@@ -58,9 +58,9 @@ class RemoteConnectionImpl extends UnicastRemoteObject implements RemoteConnecti
 	 * and begins a new one.
 	 */
 	void commit() {
+		printAllBlockStats();
 		tx.commit();
 		tx = new Transaction();
-		printAllBlockStats();
 	}
 
 	/**
@@ -68,18 +68,19 @@ class RemoteConnectionImpl extends UnicastRemoteObject implements RemoteConnecti
 	 * and begins a new one.
 	 */
 	void rollback() {
+		printAllBlockStats();
 		tx.rollback();
 		tx = new Transaction();
 	}
 
 	private static void printBlockStats(String fileName, BasicFileStats fileStats) {
-		System.out.println(fileName + " : read" + fileStats.getBlockRead() + ", write " + fileStats.getBlockWritten());
+		System.out.println(fileName + " : read " + fileStats.getBlockRead() + ", write " + fileStats.getBlockWritten());
 	}
 
 	private static void printAllBlockStats() {
 		for(String fileName : SimpleDB.fileMgr().getMapStats().keySet()) {
 			BasicFileStats fileStats = SimpleDB.fileMgr().getMapStats().get(fileName);
-			System.out.println(fileName + " : read" + fileStats.getBlockRead() + ", write " + fileStats.getBlockWritten());
+			System.out.println(fileName + " : read " + fileStats.getBlockRead() + ", write " + fileStats.getBlockWritten());
 		}
 	}
 }

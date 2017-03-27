@@ -62,7 +62,7 @@ class BasicBufferMgr {
 	synchronized Buffer pin(Block blk) {
 		Buffer buff = findExistingBuffer(blk);
 		if (buff == null) {
-			buff = chooseUnpinnedBuffer();
+			buff = chooseUnpinnedBuffer_LRU();
 			if (buff == null)
 				return null;
 			buff.assignToBlock(blk);
@@ -83,7 +83,7 @@ class BasicBufferMgr {
 	 * @return the pinned buffer
 	 */
 	synchronized Buffer pinNew(String filename, PageFormatter fmtr) {
-		Buffer buff = chooseUnpinnedBuffer();
+		Buffer buff = chooseUnpinnedBuffer_LRU();
 		if (buff == null)
 			return null;
 		buff.assignToNew(filename, fmtr);

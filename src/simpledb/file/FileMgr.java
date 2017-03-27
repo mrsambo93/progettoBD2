@@ -150,11 +150,13 @@ public class FileMgr {
 
 	//TODO
 	private void updateReadBlockStats(Block blk, ByteBuffer bb) {
-		this.blockStatsFile.get(blk.fileName()).incrementBlockRead();
+		if(this.blockStatsFile.get(blk.fileName()) !=  null)
+			this.blockStatsFile.get(blk.fileName()).incrementBlockRead();
 	}
 
 	private void updateWriteBlockStats(Block blk, ByteBuffer bb) {
-		this.blockStatsFile.get(blk.fileName()).incrementBlockWritten();
+		if(this.blockStatsFile.get(blk.fileName()) !=  null)
+			this.blockStatsFile.get(blk.fileName()).incrementBlockWritten();
 	}
 	
 	public final Map<String,BasicFileStats> getMapStats() {
