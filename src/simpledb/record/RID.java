@@ -38,15 +38,25 @@ public class RID {
 	}
 
 	public boolean equals(Object obj) {
+		if(obj==null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
 		RID r = (RID) obj;
 		return blknum == r.blknum && id==r.id;
 	}
-	
-	public int hashCode() {
-		return blknum + id;
-	}
 
+	public static RID NULL = new RID(-1,-1);
+	
 	public String toString() {
 		return "[" + blknum + ", " + id + "]";
+	}
+	
+	public int hashCode() {
+		final int primo = 31;
+		int result = 1;
+		result = primo + result + blknum;
+		result = primo + result + id;
+		return result;
 	}
 }

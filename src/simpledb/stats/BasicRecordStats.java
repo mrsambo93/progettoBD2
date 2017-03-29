@@ -4,17 +4,15 @@ public class BasicRecordStats {
 
 	private int readRecord = 0;
 	private int writtenRecord = 0;
-	private int readFieldsRecord = 0;
-	private int writtenFieldsRecord = 0;
+	private int readFieldRecord = 0;
+	private int writtenFieldRecord = 0;
 	
-	public BasicRecordStats() {}
-
 	public int getReadRecord() {
 		return readRecord;
 	}
-
-	public void setReadRecord(int readRecord) {
-		this.readRecord = readRecord;
+	
+	public void setReadRecord(int numReadRecord) {
+		readRecord = numReadRecord;
 	}
 
 	public int getWrittenRecord() {
@@ -25,36 +23,35 @@ public class BasicRecordStats {
 		this.writtenRecord = writtenRecord;
 	}
 
-	public int getReadFieldsRecord() {
-		return readFieldsRecord;
+	public int getReadFieldRecord() {
+		return readFieldRecord;
 	}
 
-	public void setReadFieldsRecord(int readFieldsRecord) {
-		this.readFieldsRecord = readFieldsRecord;
+	public void setReadFieldRecord(int readFieldRecord) {
+		this.readFieldRecord = readFieldRecord;
 	}
 
-	public int getWrittenFieldsRecord() {
-		return writtenFieldsRecord;
+	public int getWrittenFieldRecord() {
+		return writtenFieldRecord;
 	}
 
-	public void setWrittenFieldsRecord(int writtenFieldsRecord) {
-		this.writtenFieldsRecord = writtenFieldsRecord;
+	public void setWrittenFieldRecord(int writtenFieldRecord) {
+		this.writtenFieldRecord = writtenFieldRecord;
 	}
 	
-	public void incrementReadRecord() {
-		this.setReadRecord(this.getReadRecord() + 1);
-	}
-
-	public void incrementWrittenRecord() {
-		this.setWrittenRecord(this.getWrittenRecord() + 1);
+	public void incrementalReadRecord() {
+		this.readRecord += 1;
 	}
 	
-	public void incrementReadFieldsRecord() {
-		this.setReadFieldsRecord(this.getReadFieldsRecord() + 1);
-	}
-
-	public void incrementWrittenFieldsRecord() {
-		this.setWrittenFieldsRecord(this.getWrittenFieldsRecord() + 1);
+	public void incrementalReadFieldRecord() {
+		this.readFieldRecord += 1;
 	}
 	
+	public void incrementalWrittenRecord() {
+		this.writtenRecord += 1;
+	}
+
+	public void incrementalWrittenFieldRecord() {
+		this.writtenFieldRecord += 1;
+	}
 }

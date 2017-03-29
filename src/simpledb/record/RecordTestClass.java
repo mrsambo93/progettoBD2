@@ -10,23 +10,22 @@ import simpledb.tx.Transaction;
 
 public class RecordTestClass {
 
-	private static Random randomGenerator = new Random();
-	private static final String CHAR_LIST = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-	private static final int RANDOM_STRING_LENGTH = 25;
-	private static final String TABLE_FIELD_MATRICOLA = "Matricola";
-	private static final String TABLE_FIELD_NAME = "name";
-	private static final String TABLE_FIELD_NUMEROCASUALE = "numero casuale";
-	private static final int INSERT_STUDENT_QTV = 10000;
-	private static final int INSERT_STUDENT_QTV_NEW = 7000;
+	private static Random randomNumberGenerator = new Random();
+	private static RandomStr randomStringGenerator = new RandomStr();
+	private static int MAX_STRING_LENGTH = 25;
+	private static String TABLE_FIELD_MATRICOLA = "Matricola";
+	private static String TABLE_FIELD_NAME = "name";
+	private static String TABLE_FIELD_NUMEROCASUALE = "numero casuale";
+	private static int INSERT_STUDENT_QTV = 10000;
+	private static int INSERT_STUDENT_QTV_NEW = 7000;
 	private static long TOTAL_BLK_READ = 0;
 	private static long TOTAL_BLK_WRITTEN = 0;
 
-	public static final void main(String[] args){
-		
-		SimpleDB.init("studentdbtest");
+	public static void main(String[] args) {
+		SimpleDB.init("studentdbTest2");
 		Schema schTableTest = new Schema();
 		schTableTest.addIntField(TABLE_FIELD_MATRICOLA);
-		schTableTest.addStringField(TABLE_FIELD_NAME,RANDOM_STRING_LENGTH);
+		schTableTest.addStringField(TABLE_FIELD_NAME,MAX_STRING_LENGTH);
 		schTableTest.addIntField(TABLE_FIELD_NUMEROCASUALE);
 
 		TableInfo tbiTableTest = new TableInfo("studenti",schTableTest);
@@ -111,8 +110,8 @@ public class RecordTestClass {
 		for(int i=0;i<howMuch;i++) {
 			rfTable.insert();
 			rfTable.setInt(TABLE_FIELD_MATRICOLA,i);
-			rfTable.setString(TABLE_FIELD_NAME,randomStringGenerator());
-			rfTable.setInt(TABLE_FIELD_NUMEROCASUALE,randomNumberGenerator(howMuch));
+			rfTable.setString(TABLE_FIELD_NAME,randomStringGenerator.get(MAX_STRING_LENGTH));
+			rfTable.setInt(TABLE_FIELD_NUMEROCASUALE,randomNumberGenerator.nextInt(howMuch));
 		}
 		printRecordStats(rfTable);
 		System.out.println("---BLOCKS---");
@@ -169,21 +168,37 @@ public class RecordTestClass {
 			System.out.println("Record scritti "+totalRecordWritten);
 		}
 	}
+}
 
-	private static int randomNumberGenerator(int howMuch) {
-		return randomGenerator.nextInt(howMuch);
+class RandomStr {
+	private final char[] alphanumeric = alphanumeric();
+	private final Random rand;
+
+	public RandomStr() {
+		this(null);
 	}
 
-	private static String randomStringGenerator() {
-		StringBuffer randStr = new StringBuffer();
-		for(int i=0; i<RANDOM_STRING_LENGTH; i++) {
-			int randomInt = 0;
-			Random randomGenerator = new Random();
-			randomInt = randomGenerator.nextInt(CHAR_LIST.length());
-			char ch = CHAR_LIST.charAt(randomInt);
-			randStr.append(ch);
+	public RandomStr(Random rand) {
+		this.rand = (rand!=null) ? rand : new Random();    // ? che sarebbe?
+	}
+
+	public String get(int len) {
+		StringBuffer out = new StringBuffer();
+
+		while(out.length()<len) {
+			int idx = Math.abs((rand.nextInt()%alphanumeric.length));
+			out.append(alphanumeric[idx]);
 		}
-		return randStr.toString();
+		return out.toString();
+
 	}
 
+	private char[] alphanumeric() {
+		StringBuffer buf = new StringBuffer(128);
+		for(int i=65; i<=90; i++)
+			buf.append((char) i);
+		for(int i=97; i<=122; i++)
+			buf.append((char) i);
+		return buf.toString().toCharArray();
+	}
 }
